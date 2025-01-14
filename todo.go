@@ -7,6 +7,7 @@ import (
 
 type Todo struct {
 	Title       string
+	Description string
 	Completed   bool
 	CreatedAt   time.Time
 	CompletedAt *time.Time
@@ -14,9 +15,10 @@ type Todo struct {
 
 type Todos []Todo
 
-func (todos *Todos) add(title string) {
+func (todos *Todos) add(title, description string) {
 	todo := Todo{
 		Title:       title,
+		Description: description,
 		Completed:   false,
 		CompletedAt: nil,
 		CreatedAt:   time.Now(),
@@ -65,7 +67,7 @@ func (todos *Todos) toggle(index int) error {
 	return nil
 }
 
-func (todos *Todos) edit(index int, title string) error {
+func (todos *Todos) edit(index int, title, description string) error {
 	t := *todos
 
 	if err := t.validateIndex(index); err != nil {
@@ -73,6 +75,7 @@ func (todos *Todos) edit(index int, title string) error {
 	}
 
 	t[index].Title = title
+	t[index].Description = description
 
 	return nil
 }
