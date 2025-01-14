@@ -16,6 +16,7 @@ func main() {
 	fmt.Println("TODO: after")
 	todos.toggle(2)
 	todos.delete(1)
+	todos.edit(0, "Message her")
 	for _, todo := range todos {
 		fmt.Printf("[%t] %s\n", todo.Completed, todo.Title)
 	}

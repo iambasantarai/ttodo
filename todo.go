@@ -64,3 +64,15 @@ func (todos *Todos) toggle(index int) error {
 
 	return nil
 }
+
+func (todos *Todos) edit(index int, title string) error {
+	t := *todos
+
+	if err := t.validateIndex(index); err != nil {
+		return err
+	}
+
+	t[index].Title = title
+
+	return nil
+}
