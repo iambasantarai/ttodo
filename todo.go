@@ -28,9 +28,8 @@ func (todos *Todos) add(title, description string) {
 }
 
 func (todos *Todos) validateIndex(index int) error {
-	if index < 0 || index > len(*todos) {
-		err := errors.New("Invalid index")
-		return err
+	if index < 0 || index >= len(*todos) {
+		return errors.New("Invalid index")
 	}
 
 	return nil
