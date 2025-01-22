@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	todos := Todos{}
+
 	cliArgs := os.Args
 	if len(cliArgs) < 2 {
 		fmt.Println("expected 'add', 'update', 'remove', or 'toggle' subcommand")
@@ -36,22 +38,19 @@ func main() {
 	case "add":
 		addCmd.Parse(os.Args[2:])
 
-		fmt.Println(*addTitle)
-		fmt.Println(*addDescription)
+		todos.add(*addTitle, *addDescription)
 	case "toggle":
 		toggleCmd.Parse(os.Args[2:])
 
-		fmt.Println(*toggleId)
+		todos.toggle(*toggleId)
 	case "update":
 		updateCmd.Parse(os.Args[2:])
 
-		fmt.Println(*updateId)
-		fmt.Println(*updateTitle)
-		fmt.Println(*updateDescription)
+		todos.update(*updateId, *updateTitle, *updateDescription)
 	case "remove":
 		removeCmd.Parse(os.Args[2:])
 
-		fmt.Println(*removeId)
+		todos.remove(*removeId)
 	default:
 		fmt.Printf("Unknown command: %s", cliArgs[1])
 		os.Exit(1)

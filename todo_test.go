@@ -31,7 +31,7 @@ func TestTodoOperations(t *testing.T) {
 			{Title: "Todo 2", Description: "Description 2", Completed: false},
 		}
 
-		err := todos.delete(0)
+		err := todos.remove(0)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -71,7 +71,7 @@ func TestTodoOperations(t *testing.T) {
 
 		title := "Updated Todo"
 		description := "Updated Description"
-		err := todos.edit(0, title, description)
+		err := todos.update(0, title, description)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}

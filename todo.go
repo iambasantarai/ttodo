@@ -35,7 +35,7 @@ func (todos *Todos) validateIndex(index int) error {
 	return nil
 }
 
-func (todos *Todos) delete(index int) error {
+func (todos *Todos) remove(index int) error {
 	t := *todos
 
 	if err := t.validateIndex(index); err != nil {
@@ -66,7 +66,7 @@ func (todos *Todos) toggle(index int) error {
 	return nil
 }
 
-func (todos *Todos) edit(index int, title, description string) error {
+func (todos *Todos) update(index int, title, description string) error {
 	t := *todos
 
 	if err := t.validateIndex(index); err != nil {
