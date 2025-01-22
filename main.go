@@ -15,39 +15,43 @@ func main() {
 
 	opCommand := cliArgs[1]
 
+	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+	addTitle := addCmd.String("t", "Untitled", "title for todo")
+	addDescription := addCmd.String("d", "", "description for todo (optional)")
+
+	toggleCmd := flag.NewFlagSet("toggle", flag.ExitOnError)
+	toggleId := toggleCmd.Int("i", 0, "id of todo to toggle status")
+
+	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
+	updateId := updateCmd.Int("i", 0, "id of todo to update")
+	updateTitle := updateCmd.String("t", "Untitled", "new title for todo")
+	updateDescription := updateCmd.String("d", "", "new description for todo (optional)")
+
+	removeCmd := flag.NewFlagSet("delete", flag.ExitOnError)
+	removeId := removeCmd.Int("i", 0, "id of todo to toggle status")
+
 	cliArgs = cliArgs[2:]
 
 	switch opCommand {
 	case "add":
-		title := flag.String("t", "Untitled", "title for todo")
-		description := flag.String("d", "", "description for todo")
+		addCmd.Parse(os.Args[2:])
 
-		flag.Parse()
-
-		fmt.Println(*title)
-		fmt.Println(*description)
+		fmt.Println(*addTitle)
+		fmt.Println(*addDescription)
 	case "toggle":
-		id := flag.Int("i", 0, "id of todo")
+		toggleCmd.Parse(os.Args[2:])
 
-		flag.Parse()
-
-		fmt.Println(*id)
+		fmt.Println(*toggleId)
 	case "update":
-		id := flag.Int("i", 0, "id of todo")
-		title := flag.String("t", "Untitled", "title for todo")
-		descriptionPtr := flag.String("d", "", "description for todo")
+		updateCmd.Parse(os.Args[2:])
 
-		flag.Parse()
-
-		fmt.Println(*id)
-		fmt.Println(*title)
-		fmt.Println(*descriptionPtr)
+		fmt.Println(*updateId)
+		fmt.Println(*updateTitle)
+		fmt.Println(*updateDescription)
 	case "remove":
-		id := flag.Int("i", 0, "id of todo")
+		removeCmd.Parse(os.Args[2:])
 
-		flag.Parse()
-
-		fmt.Println(*id)
+		fmt.Println(*removeId)
 	default:
 		fmt.Printf("Unknown command: %s", cliArgs[1])
 		os.Exit(1)
