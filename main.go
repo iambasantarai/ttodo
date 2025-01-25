@@ -32,6 +32,8 @@ func main() {
 	removeCmd := flag.NewFlagSet("delete", flag.ExitOnError)
 	removeId := removeCmd.Int("i", 0, "id of todo to toggle status")
 
+	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
+
 	cliArgs = cliArgs[2:]
 
 	switch opCommand {
@@ -51,6 +53,10 @@ func main() {
 		removeCmd.Parse(os.Args[2:])
 
 		todos.remove(*removeId)
+	case "list":
+		listCmd.Parse(os.Args[2:])
+
+		todos.list()
 	default:
 		fmt.Printf("Unknown command: %s", cliArgs[1])
 		os.Exit(1)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -77,4 +78,10 @@ func (todos *Todos) update(index int, title, description string) error {
 	t[index].Description = description
 
 	return nil
+}
+
+func (todos *Todos) list() {
+	for idx, todo := range *todos {
+		fmt.Printf("%d. [%T] %s\n %s\n\n", idx, todo.Completed, todo.Title, todo.Description)
+	}
 }
