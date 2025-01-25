@@ -8,9 +8,8 @@ func TestTodoOperations(t *testing.T) {
 	t.Run("add todo", func(t *testing.T) {
 		todos := &Todos{}
 		title := "Test Todo"
-		description := "This is a test todo."
 
-		todos.add(title, description)
+		todos.add(title)
 
 		if len(*todos) != 1 {
 			t.Errorf("Expected 1 todo, got %d", len(*todos))
@@ -19,16 +18,12 @@ func TestTodoOperations(t *testing.T) {
 		if (*todos)[0].Title != title {
 			t.Errorf("Expected title %s, got %s", title, (*todos)[0].Title)
 		}
-
-		if (*todos)[0].Description != description {
-			t.Errorf("Expected description %s, got %s", description, (*todos)[0].Description)
-		}
 	})
 
 	t.Run("delete todo", func(t *testing.T) {
 		todos := &Todos{
-			{Title: "Todo 1", Description: "Description 1", Completed: false},
-			{Title: "Todo 2", Description: "Description 2", Completed: false},
+			{Title: "Todo 1", Completed: false},
+			{Title: "Todo 2", Completed: false},
 		}
 
 		err := todos.remove(0)
@@ -47,7 +42,7 @@ func TestTodoOperations(t *testing.T) {
 
 	t.Run("toggle todo", func(t *testing.T) {
 		todos := &Todos{
-			{Title: "Todo 1", Description: "Description 1", Completed: false},
+			{Title: "Todo 1", Completed: false},
 		}
 
 		err := todos.toggle(0)
@@ -66,12 +61,11 @@ func TestTodoOperations(t *testing.T) {
 
 	t.Run("update todo", func(t *testing.T) {
 		todos := &Todos{
-			{Title: "Todo 1", Description: "Description 1", Completed: false},
+			{Title: "Todo 1", Completed: false},
 		}
 
 		title := "Updated Todo"
-		description := "Updated Description"
-		err := todos.update(0, title, description)
+		err := todos.update(0, title)
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
@@ -79,16 +73,12 @@ func TestTodoOperations(t *testing.T) {
 		if (*todos)[0].Title != title {
 			t.Errorf("Expected title %s, got %s", title, (*todos)[0].Title)
 		}
-
-		if (*todos)[0].Description != description {
-			t.Errorf("Expected description %s, got %s", description, (*todos)[0].Description)
-		}
 	})
 }
 
 func TestValidateIndex(t *testing.T) {
 	todos := &Todos{
-		{Title: "Todo 1", Description: "Description 1", Completed: false},
+		{Title: "Todo 1", Completed: false},
 	}
 
 	testCases := []struct {

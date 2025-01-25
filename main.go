@@ -21,7 +21,6 @@ func main() {
 
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addTitle := addCmd.String("t", "Untitled", "title for todo")
-	addDescription := addCmd.String("d", "", "description for todo (optional)")
 
 	toggleCmd := flag.NewFlagSet("toggle", flag.ExitOnError)
 	toggleId := toggleCmd.Int("i", -1, "id of todo to toggle status")
@@ -29,7 +28,6 @@ func main() {
 	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
 	updateId := updateCmd.Int("i", -1, "id of todo to update")
 	updateTitle := updateCmd.String("t", "Untitled", "new title for todo")
-	updateDescription := updateCmd.String("d", "", "new description for todo (optional)")
 
 	removeCmd := flag.NewFlagSet("delete", flag.ExitOnError)
 	removeId := removeCmd.Int("i", -1, "id of todo to toggle status")
@@ -42,7 +40,7 @@ func main() {
 	case "add":
 		addCmd.Parse(os.Args[2:])
 
-		todos.add(*addTitle, *addDescription)
+		todos.add(*addTitle)
 	case "toggle":
 		toggleCmd.Parse(os.Args[2:])
 
@@ -50,7 +48,7 @@ func main() {
 	case "update":
 		updateCmd.Parse(os.Args[2:])
 
-		todos.update(*updateId, *updateTitle, *updateDescription)
+		todos.update(*updateId, *updateTitle)
 	case "remove":
 		removeCmd.Parse(os.Args[2:])
 
