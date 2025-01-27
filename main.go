@@ -3,13 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
 func main() {
-	todos := Todos{}
-	store := NewStore[Todos]("todos.json")
-	store.load(&todos)
+	store := &Store{}
+	if err := store.Init(); err != nil {
+		log.Fatalf("unable to init store: %v", err)
+	}
 
 	cliArgs := os.Args
 	if len(cliArgs) < 2 {
@@ -23,14 +25,14 @@ func main() {
 	addTitle := addCmd.String("t", "Untitled", "title for todo")
 
 	toggleCmd := flag.NewFlagSet("toggle", flag.ExitOnError)
-	toggleId := toggleCmd.Int("i", -1, "id of todo to toggle status")
+	toggleId := toggleCmd.Int64("i", -1, "id of todo to toggle status")
 
 	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
-	updateId := updateCmd.Int("i", -1, "id of todo to update")
+	updateId := updateCmd.Int64("i", -1, "id of todo to update")
 	updateTitle := updateCmd.String("t", "Untitled", "new title for todo")
 
 	removeCmd := flag.NewFlagSet("delete", flag.ExitOnError)
-	removeId := removeCmd.Int("i", -1, "id of todo to toggle status")
+	removeId := removeCmd.Int64("i", -1, "id of todo to toggle status")
 
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
 
@@ -40,27 +42,25 @@ func main() {
 	case "add":
 		addCmd.Parse(os.Args[2:])
 
-		todos.add(*addTitle)
+		store.AddTodo(*addTitle)
 	case "toggle":
 		toggleCmd.Parse(os.Args[2:])
 
-		todos.toggle(*toggleId)
+		store.ToggleTodo(*toggleId)
 	case "update":
 		updateCmd.Parse(os.Args[2:])
 
-		todos.update(*updateId, *updateTitle)
+		store.UpdateTodo(*updateId, *updateTitle)
 	case "remove":
 		removeCmd.Parse(os.Args[2:])
 
-		todos.remove(*removeId)
+		store.RemoveTodo(*removeId)
 	case "list":
 		listCmd.Parse(os.Args[2:])
 
-		todos.list()
+		store.GetTodos()
 	default:
 		fmt.Printf("Unknown command: %s", cliArgs[1])
 		os.Exit(1)
 	}
-
-	store.save(todos)
 }
