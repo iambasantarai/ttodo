@@ -41,7 +41,10 @@ func (s *Store) Init() error {
 }
 
 func (s *Store) GetTodos() ([]Todo, error) {
-	rows, err := s.conn.Query("SELECT * FROM todos")
+	rows, err := s.conn.Query(`
+        SELECT id, title, completed, created_at, completed_at 
+        FROM todos
+    `)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +86,7 @@ func (s *Store) RemoveTodo(id int64) error {
 		return err
 	}
 	if rowsAffected == 0 {
-		return errors.New("Todo not found")
+		return errors.New("todo not found")
 	}
 
 	return nil
@@ -128,7 +131,7 @@ func (s *Store) UpdateTodo(id int64, title string) error {
 		return err
 	}
 	if rowsAffected == 0 {
-		return errors.New("Todo not found")
+		return errors.New("todo not found")
 	}
 
 	return nil
