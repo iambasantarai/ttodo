@@ -102,7 +102,7 @@ func main() {
 			)
 		}
 	default:
-		fmt.Printf("Unknown command: %s", cliArgs[1])
+		fmt.Printf("Unknown command: %s", opCommand)
 		os.Exit(1)
 	}
 }
