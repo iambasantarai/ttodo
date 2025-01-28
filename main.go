@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func main() {
@@ -100,6 +102,18 @@ func main() {
 				todo.CreatedAt.Format("2006-01-02 15:04"),
 				completedAt,
 			)
+		}
+	case "interactive":
+		todos, err := store.GetTodos()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		p := tea.NewProgram(model{
+			todos: todos,
+		})
+		if _, err := p.Run(); err != nil {
+			log.Fatal(err)
 		}
 	default:
 		fmt.Printf("Unknown command: %s", opCommand)
