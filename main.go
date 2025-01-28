@@ -116,7 +116,7 @@ func main() {
 			log.Fatal(err)
 		}
 	default:
-		fmt.Printf("Unknown command: %s", opCommand)
+		fmt.Printf("Unknown command: %s\n", opCommand)
 		os.Exit(1)
 	}
 }

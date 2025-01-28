@@ -36,7 +36,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	s := "Ahh! man, lots of thing to do.\n\n"
+	s := mood() + "\n"
+	s += "TODOS\n\n"
 
 	for i, todo := range m.todos {
 		cursor := " "
