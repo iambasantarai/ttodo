@@ -1,9 +1,9 @@
 BIN_DIR := bin
 
 build:
-	go build -o bin/ttodo
+	go build -o $(BIN_DIR)/ttodo
 run: build
-	./bin/ttodo
+	./$(BIN_DIR)/ttodo
 test: build
 	go test -v ./...
 clean:
