@@ -7,8 +7,9 @@ import (
 )
 
 type model struct {
-	todos  []Todo
-	cursor int
+	todos     []Todo
+	cursor    int
+	altscreen bool
 }
 
 func (m model) Init() tea.Cmd {
@@ -29,6 +30,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor < len(m.todos)-1 {
 				m.cursor++
 			}
+		case "z":
+			var cmd tea.Cmd
+			if m.altscreen {
+				cmd = tea.ExitAltScreen
+			} else {
+				cmd = tea.EnterAltScreen
+			}
+			m.altscreen = !m.altscreen
+			return m, cmd
 		}
 	}
 
@@ -47,7 +57,7 @@ func (m model) View() string {
 		s += fmt.Sprintf("%s %d [%t] %s\n", cursor, todo.Id, todo.Completed, todo.Title)
 	}
 
-	s += "\nPress q to quit.\n"
+	s += "\nPress \n z: to toggle zen mode. \n q: to quit.\n"
 
 	return s
 }
