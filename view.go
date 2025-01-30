@@ -7,9 +7,9 @@ import (
 )
 
 type model struct {
-	todos     []Todo
-	cursor    int
-	altscreen bool
+	todos   []Todo
+	cursor  int
+	zenMode bool
 }
 
 func (m model) Init() tea.Cmd {
@@ -32,12 +32,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "z":
 			var cmd tea.Cmd
-			if m.altscreen {
+			if m.zenMode {
 				cmd = tea.ExitAltScreen
 			} else {
 				cmd = tea.EnterAltScreen
 			}
-			m.altscreen = !m.altscreen
+			m.zenMode = !m.zenMode
 			return m, cmd
 		}
 	}
