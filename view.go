@@ -39,6 +39,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.zenMode = !m.zenMode
 			return m, cmd
+		case "a":
+			// add todo
+		case "u":
+			// update todo
+		case "t":
+			// toggle todo
+		case "r":
+			// remove todo
+		case "X":
+			// clean completed todos
 		}
 	}
 
