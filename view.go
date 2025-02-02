@@ -4,7 +4,13 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
+
+var moodStyle = lipgloss.NewStyle().
+	Bold(true).
+	Foreground(lipgloss.Color("#FAFAFA")).
+	Background(lipgloss.Color("#7D56F4"))
 
 type model struct {
 	todos   []Todo
@@ -56,7 +62,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	s := mood() + "\n"
+	s := moodStyle.Render(mood()) + "\n"
 	s += "TODOS\n\n"
 
 	for i, todo := range m.todos {

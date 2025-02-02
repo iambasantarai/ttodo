@@ -18,7 +18,9 @@ func main() {
 
 	cliArgs := os.Args
 	if len(cliArgs) < 2 {
-		fmt.Println("expected 'add', 'update', 'remove', 'toggle' or 'list' subcommand")
+		fmt.Println(
+			"expected 'add', 'update', 'remove', 'toggle', 'list', or 'interactive' subcommand",
+		)
 		os.Exit(1)
 	}
 
