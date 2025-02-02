@@ -9,11 +9,17 @@ import (
 func mood() string {
 	today := time.Now()
 	year := today.Year()
-	month := today.Month()
+	month := today.Month().String()
 	day := today.Day()
 	weekDay := today.Weekday().String()
 
-	prefix := fmt.Sprintf("[%d/%s/%d] %s > ", year, month, day, weekDay)
+	prefix := fmt.Sprintf(
+		"[%d/%s/%d] %s > ",
+		year,
+		getAbbreviation(month),
+		day,
+		getAbbreviation(weekDay),
+	)
 
 	switch strings.ToLower(weekDay) {
 	case "sunday":
@@ -33,4 +39,8 @@ func mood() string {
 	default:
 		return "Chill mode: ON."
 	}
+}
+
+func getAbbreviation(weekDay string) string {
+	return string([]rune(weekDay)[:3])
 }
