@@ -7,6 +7,86 @@ import (
 	"os"
 )
 
+func validateID(id int64) {
+	if id < 1 {
+		log.Fatal("Invalid ID - must be a positive integer")
+	}
+}
+
+func handleAdd(store *Store, args []string) {
+	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+	addTitle := addCmd.String("t", "Untitled", "Title for todo")
+	addCmd.Parse(args)
+
+	if err := store.AddTodo(*addTitle); err != nil {
+		log.Fatal("Failed to add todo:", err)
+	}
+	fmt.Println("Todo added successfully")
+}
+
+func handleToggle(store *Store, args []string) {
+	toggleCmd := flag.NewFlagSet("toggle", flag.ExitOnError)
+	toggleId := toggleCmd.Int64("i", -1, "ID of todo to toggle status")
+	toggleCmd.Parse(args)
+
+	validateID(*toggleId)
+
+	if err := store.ToggleTodo(*toggleId); err != nil {
+		log.Fatal("Failed to toggle todo:", err)
+	}
+	fmt.Println("Todo toggled successfully")
+}
+
+func handleUpdate(store *Store, args []string) {
+	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
+	updateId := updateCmd.Int64("i", -1, "ID of todo to update")
+	updateTitle := updateCmd.String("t", "Untitled", "New title for todo")
+	updateCmd.Parse(args)
+
+	validateID(*updateId)
+
+	if err := store.UpdateTodo(*updateId, *updateTitle); err != nil {
+		log.Fatal("Failed to update todo:", err)
+	}
+	fmt.Println("Todo updated successfully")
+}
+
+func handleRemove(store *Store, args []string) {
+	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
+	removeId := removeCmd.Int64("i", -1, "ID of todo to remove")
+	removeCmd.Parse(args)
+
+	validateID(*removeId)
+
+	if err := store.RemoveTodo(*removeId); err != nil {
+		log.Fatal("Failed to remove todo:", err)
+	}
+	fmt.Println("Todo removed successfully")
+}
+
+func handleClean(store *Store) {
+	if err := store.Clean(); err != nil {
+		log.Fatal("Failed to clean completed todos:", err)
+	}
+	fmt.Println("Completed todos removed successfully")
+}
+
+func handleList(store *Store) {
+	todos, err := store.GetTodos()
+	if err != nil {
+		log.Fatal("Failed to retrieve todos:", err)
+	}
+
+	fmt.Println("Todos:")
+	for _, todo := range todos {
+		status := " "
+		if todo.Completed {
+			status = "x"
+		}
+		fmt.Printf("[%s] %-3d: %s\n", status, todo.Id, todo.Title)
+	}
+}
+
 func main() {
 	store := &Store{}
 	if err := store.Init(); err != nil {
@@ -16,89 +96,26 @@ func main() {
 
 	cliArgs := os.Args
 	if len(cliArgs) < 2 {
-		fmt.Println(
-			"expected 'add', 'update', 'remove', 'toggle', 'list', or 'clean' subcommand",
-		)
+		fmt.Println("Expected 'add', 'update', 'remove', 'toggle', 'list', or 'clean' subcommand")
 		os.Exit(1)
 	}
 
 	opCommand := cliArgs[1]
-
-	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addTitle := addCmd.String("t", "Untitled", "Title for todo")
-
-	toggleCmd := flag.NewFlagSet("toggle", flag.ExitOnError)
-	toggleId := toggleCmd.Int64("i", -1, "ID of todo to toggle status")
-
-	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
-	updateId := updateCmd.Int64("i", -1, "ID of todo to update")
-	updateTitle := updateCmd.String("t", "Untitled", "New title for todo")
-
-	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
-	removeId := removeCmd.Int64("i", -1, "ID of todo to remove")
-
-	cliArgs = cliArgs[2:]
+	args := cliArgs[2:]
 
 	switch opCommand {
 	case "add":
-		addCmd.Parse(os.Args[2:])
-		if err := store.AddTodo(*addTitle); err != nil {
-			log.Fatal("Failed to add todo: ", err)
-		}
-		fmt.Println("Todo added successfully")
-
+		handleAdd(store, args)
 	case "toggle":
-		toggleCmd.Parse(os.Args[2:])
-		if *toggleId < 1 {
-			log.Fatal("Invalid ID - must be positive integer")
-		}
-		if err := store.ToggleTodo(*toggleId); err != nil {
-			log.Fatal("Failed to toggle todo:", err)
-		}
-		fmt.Println("Todo toggled successfully")
-
+		handleToggle(store, args)
 	case "update":
-		updateCmd.Parse(os.Args[2:])
-		if *updateId < 1 {
-			log.Fatal("Invalid ID - must be positive integer")
-		}
-		if err := store.UpdateTodo(*updateId, *updateTitle); err != nil {
-			log.Fatal("Failed to update todo:", err)
-		}
-		fmt.Println("Todo updated successfully")
-
+		handleUpdate(store, args)
 	case "remove":
-		removeCmd.Parse(os.Args[2:])
-		if *removeId < 1 {
-			log.Fatal("Invalid ID - must be positive integer")
-		}
-		if err := store.RemoveTodo(*removeId); err != nil {
-			log.Fatal("Failed to remove todo:", err)
-		}
-		fmt.Println("Todo removed successfully")
+		handleRemove(store, args)
 	case "clean":
-		if err := store.Clean(); err != nil {
-			log.Fatal("Failed to clean completed todos:", err)
-		}
-		fmt.Println("Completed todos removed successfully")
-
+		handleClean(store)
 	case "list":
-		todos, err := store.GetTodos()
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println("Todos:")
-		for _, todo := range todos {
-			status := " "
-			if todo.Completed {
-				status = "x"
-			}
-			fmt.Printf("[%s] %d: %s\n",
-				status,
-				todo.Id,
-				todo.Title,
-			)
-		}
+		handleList(store)
 	default:
 		fmt.Printf("Unknown command: %s\n", opCommand)
 		os.Exit(1)
