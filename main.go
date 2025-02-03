@@ -37,10 +37,6 @@ func main() {
 	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
 	removeId := removeCmd.Int64("i", -1, "ID of todo to remove")
 
-	cleanCmd := flag.NewFlagSet("clean", flag.ExitOnError)
-
-	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
-
 	cliArgs = cliArgs[2:]
 
 	switch opCommand {
@@ -81,14 +77,12 @@ func main() {
 		}
 		fmt.Println("Todo removed successfully")
 	case "clean":
-		cleanCmd.Parse(os.Args[2:])
 		if err := store.Clean(); err != nil {
 			log.Fatal("Failed to clean completed todos:", err)
 		}
 		fmt.Println("Completed todos removed successfully")
 
 	case "list":
-		listCmd.Parse(os.Args[2:])
 		todos, err := store.GetTodos()
 		if err != nil {
 			log.Fatal(err)
