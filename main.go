@@ -99,16 +99,10 @@ func main() {
 			if todo.Completed {
 				status = "x"
 			}
-			completedAt := ""
-			if todo.CompletedAt != nil {
-				completedAt = todo.CompletedAt.Format("2006-01-02 15:04")
-			}
-			fmt.Printf("[%s] %d: %s\n   Created: %s\n   Completed: %s\n",
+			fmt.Printf("[%s] %d: %s\n",
 				status,
 				todo.Id,
 				todo.Title,
-				todo.CreatedAt.Format("2006-01-02 15:04"),
-				completedAt,
 			)
 		}
 	default:
