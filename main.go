@@ -13,6 +13,21 @@ func validateID(id int64) {
 	}
 }
 
+// Prints usage instructions for the CLI tool.
+func helpMenu() {
+	fmt.Println(`Usage:
+  todo <command> [options]
+
+Commands:
+  add       -t "Title"           Add a new todo
+  toggle    -i ID                Toggle completion status of a todo
+  update    -i ID -t "New Title" Update a todo title
+  remove    -i ID                Remove a todo
+  clean                          Remove completed todos
+  list                           Show all todos
+`)
+}
+
 func handleAdd(store *Store, args []string) {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addTitle := addCmd.String("t", "Untitled", "Title for todo")
@@ -116,6 +131,8 @@ func main() {
 		handleClean(store)
 	case "list":
 		handleList(store)
+	case "help", "--help", "-h":
+		helpMenu()
 	default:
 		fmt.Printf("Unknown command: %s\n", opCommand)
 		os.Exit(1)
