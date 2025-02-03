@@ -137,6 +137,27 @@ func (s *Store) UpdateTodo(id int64, title string) error {
 	return nil
 }
 
+func (s *Store) Clean() error {
+	result, err := s.conn.Exec(
+		"DELETE FROM todos WHERE completed = ? AND completed_at <= ?",
+		1,
+		time.Now(),
+	)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return errors.New("todos not found")
+	}
+
+	return nil
+}
+
 func (s *Store) Close() error {
 	return s.conn.Close()
 }
