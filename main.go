@@ -25,6 +25,7 @@ Commands:
   remove    -i ID                Remove a todo
   clean                          Remove completed todos
   list                           Show all todos
+  help, --help, -h               Show help menu
 `)
 }
 
