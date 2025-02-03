@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	tea "github.com/charmbracelet/bubbletea"
 )
 
 func main() {
@@ -19,7 +17,7 @@ func main() {
 	cliArgs := os.Args
 	if len(cliArgs) < 2 {
 		fmt.Println(
-			"expected 'add', 'update', 'remove', 'toggle', 'list', or 'interactive' subcommand",
+			"expected 'add', 'update', 'remove', 'toggle', 'list', or 'clean' subcommand",
 		)
 		os.Exit(1)
 	}
@@ -80,6 +78,8 @@ func main() {
 			log.Fatal("Failed to remove todo:", err)
 		}
 		fmt.Println("Todo removed successfully")
+	case "clean":
+		// Remove all completed todos whose completedAt <= today
 
 	case "list":
 		listCmd.Parse(os.Args[2:])
@@ -104,18 +104,6 @@ func main() {
 				todo.CreatedAt.Format("2006-01-02 15:04"),
 				completedAt,
 			)
-		}
-	case "interactive":
-		todos, err := store.GetTodos()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		p := tea.NewProgram(model{
-			todos: todos,
-		})
-		if _, err := p.Run(); err != nil {
-			log.Fatal(err)
 		}
 	default:
 		fmt.Printf("Unknown command: %s\n", opCommand)
