@@ -43,7 +43,7 @@ func (s *Store) Init() error {
 func (s *Store) GetTodos() ([]Todo, error) {
 	rows, err := s.conn.Query(`
         SELECT id, title, completed, created_at, completed_at 
-        FROM todos
+        FROM todos ORDER BY completed_at
     `)
 	if err != nil {
 		return nil, err
