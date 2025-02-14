@@ -13,9 +13,21 @@ func validateID(id int64) {
 	}
 }
 
+func printTitle() {
+	ASCII := "\033[38;5;45;1m  __  __          __   \n" +
+		"\033[38;5;45;1m / /_/ /____  ___/ /__ \n" +
+		"\033[38;5;45;1m/ __/ __/ _ \\/ _  / _ \\\n" +
+		"\033[38;5;45;1m\\__/\\__/\\___/\\_,_/\\___/\033[0m"
+
+	fmt.Printf("%s\n", ASCII)
+
+	fmt.Printf("%s\n", daySay())
+}
+
 // Prints usage instructions for the CLI tool.
 func helpMenu() {
-	fmt.Println(`Usage:
+	fmt.Printf(`
+Usage:
   todo <command> [options]
 
 Commands:
@@ -104,6 +116,8 @@ func handleList(store *Store) {
 }
 
 func main() {
+	printTitle()
+
 	store := &Store{}
 	if err := store.Init(); err != nil {
 		log.Fatalf("unable to init store: %v", err)
