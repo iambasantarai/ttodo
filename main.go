@@ -26,6 +26,8 @@ func printTitle() {
 
 // Prints usage instructions for the CLI tool.
 func helpMenu() {
+	printTitle()
+
 	fmt.Printf(`
 Usage:
   todo <command> [options]
@@ -100,6 +102,8 @@ func handleClean(store *Store) {
 }
 
 func handleList(store *Store) {
+	printTitle()
+
 	todos, err := store.GetTodos()
 	if err != nil {
 		log.Fatal("Failed to retrieve todos:", err)
@@ -116,8 +120,6 @@ func handleList(store *Store) {
 }
 
 func main() {
-	printTitle()
-
 	store := &Store{}
 	if err := store.Init(); err != nil {
 		log.Fatalf("unable to init store: %v", err)
